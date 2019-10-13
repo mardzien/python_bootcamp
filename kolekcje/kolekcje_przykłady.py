@@ -57,3 +57,20 @@ print(lista[1::2])
 # z listy mogę zrobić tuplę
 moja_tupla = (1, 2, 3, 4, 5, 6)
 print(moja_tupla)
+
+
+################
+# set - zbiór
+
+A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+
+### suma
+print(A | B)
+# różnica
+print(A - B)
+print(B - A)
+#koniunkcja
+print(A & B)
+# różnica symetrycna
+print (A ^ B)
