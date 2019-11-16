@@ -1,7 +1,6 @@
 
 
 
-
 class Employee:
 
     def __init__(self, imie, nazwisko, stawka):
