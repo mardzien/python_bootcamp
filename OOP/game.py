@@ -1,17 +1,18 @@
 """
-
 1. Stwórz klasę Postac - niech ma atrybuty: imie, zycie, sila
-2. Stwórz klasę Przedmiot - niech ma atrybuty: bonus do ataku, bonus do obrony, nazwa, miejsce
-3. Postac ma atrybut atak wyliczany na podstawie sily i bonusów od przedmiotów
-4. Stwórz funkcję obsługującą grę
-5. Powinna być na niej jakś plansza o wymiarach x, y
-6. Na planszy mogą pojawić się przedmioty, czy inne postaci
-7. Jak wejdziemy na pole z przedmiotem to go bierzemy o ile miejsce w ekwipunku pozwala
-8 gdy trafimy na inną postać - walka
-
+2. Stwórz klasę Przedmiot - niech ma atrybuty: bonus_do_ataku, bonus_do_obrony, nazwa, miejsce
+3. Postac ma atrybut atak wyliczany na podstawie sily i bonusow od przedmiotow
+4. Stworz funkcje obslugujaca grę
+5. Powinna na w niej byc jakas plansza o wymiarach x, y
+6. na planszy moga pojawi sie jakies przedmioty czy inne postaci
+7. jak wejdziemy na pole z przedmiotem to go bierzemy o ile ekwipunek pozwoli
+8. gdy trafimy na inna postac to wywiazuje sie walka
 """
-
 import random
+from faker import Faker
+fake = Faker("pl_PL")
+
+DEBUG = True
 
 class Postac:
     def __init__(self, imie, zycie, sila):
@@ -22,11 +23,11 @@ class Postac:
 
     @property
     def atak(self):
-        base = self.sila + sum([x.bonus_ataku for x in self.ekwipunek])
-        return int(base*random.random())
+        base = self.sila + sum([x.bonus_do_ataku for x in self.ekwipunek])
+        return int(base * random.random())
 
-    def wez_przedmiot(self, item):
-        self.ekwipunek.append(item)
+    def wez_przedmiot(self, przedmiot):
+        self.ekwipunek.append(przedmiot)
 
     def obrazenia(self, sila):
         self.zycie -= sila
@@ -36,52 +37,63 @@ class Postac:
         return self.zycie > 0
 
     def __str__(self):
-        return f"{self.imie}, żyje={self.zyje}"
+        return f"{self.imie}, zyje={self.zyje}"
+
 
 class Przedmiot:
-    def __init__(self, nazwa, bonus_ataku, bonus_obrony, miejsce):
+    def __init__(self, nazwa, bonus_do_ataku, bonus_do_obrony, miejsce):
         self.nazwa = nazwa
-        self.bonus_ataku = bonus_ataku
-        self.bonus_obrony = bonus_obrony
+        self.bonus_do_ataku = bonus_do_ataku
+        self.bonus_do_obrony = bonus_do_obrony
         self.miejsce = miejsce
 
+    def __str__(self):
+        return f"{self.nazwa} (+a: {self.bonus_do_ataku}, +o: {self.bonus_do_obrony}, m: {self.miejsce})"
+
+
 class Polozenie:
-    def __init__(self, x, y, zasieg_x, zasieg_y):
-        self.x = x
+    def __init__(self, x, y, zasieg_x = 10, zasieg_y = 10):
+        self.x = x  # polozenie na osi x
         self.y = y
         self.zasieg_x = zasieg_x
         self.zasieg_y = zasieg_y
 
     def __str__(self):
-        return f"Pozycja x = {self.x}, y = {self.y}"
+        return f"Pozycja x={self.x}, y={self.y}"
 
-    def gora(self):
+    def g(self):
         self.y += 1
         if self.y > self.zasieg_y:
             print("Wypadłeś poza planszę")
             exit()
 
-    def dol(self):
+    def d(self):
         self.y -= 1
         if self.y < 0:
             print("Wypadłeś poza planszę")
             exit()
 
-    def prawo(self):
-        self.x += 1
-        if self.x > self.zasieg_x:
-            print("Wypadłeś poza planszę")
-            exit()
-
-    def lewo(self):
+    def l(self):
         self.x -= 1
         if self.x < 0:
             print("Wypadłeś poza planszę")
             exit()
 
+    def p(self):
+        self.x += 1
+        if self.x > self.zasieg_x:
+            print("Wypadłeś poza planszę")
+            exit()
+
+    def __eq__(self, other):
+        if self.x == other.x and self.y == other.y:
+            return True
+        return False
+
 class Plansza:
-    def __init__(self, gracz, bot, przedmiot, x = 10, y = 10):
-        self.x = x
+
+    def __init__(self, gracz: Postac, bot: Postac, przedmiot: Przedmiot, x=10, y=10):
+        self.x = x  # wymiar planszy wzdłuż osi x
         self.y = y
         self.gracz = gracz
         self.bot = bot
@@ -90,22 +102,59 @@ class Plansza:
         self.polozenie_bota = Polozenie(random.randint(1, 10), random.randint(1, 10), x, y)
         self.polozenie_przedmiotu = Polozenie(random.randint(1, 10), random.randint(1, 10), x, y)
 
+    def ruch(self):
+        if DEBUG:
+            print(f"Twoje położenie {self.polozenie_gracza}")
+            print(f"Twoje bota {self.polozenie_bota}")
+            print(f"Twoje przedmiotu {self.polozenie_przedmiotu}")
+        kierunek = input("Podaj kierunek g, d, l, p: ")
+        # if kierunek == "g":
+        #     self.polozenie_gracza.gora()
+        # elif kierunek == "d":
+        #     self.polozenie_gracza.dol()
+        # elif kierunek == "l":
+        #     self.polozenie_gracza.lewo()
+        # elif kierunek == "p":
+        #     self.polozenie_gracza.prawo()
 
-def gra():
-    hero1 = Postac("Superman", 200, 200)
-    hero2 = Postac("Hulk", 200, 200)
+        #ruch = {
+        ##    'g':self.polozenie_gracza.gora,
+        #    'd': self.polozenie_gracza.dol,
+        #    'l': self.polozenie_gracza.lewo,
+        #    'p': self.polozenie_gracza.prawo
+        #}
 
-    while not hero1.zyje and hero2.zyje:
-        hero2.obrazenia(hero1.atak)
-        if hero2.zyje:
-            hero1.obrazenia(hero2.atak)
-    print(hero1, hero2)
+        if hasattr(self.polozenie_gracza, kierunek):
+            getattr(self.polozenie_gracza, kierunek)()
+        else:
+            print("niepoprawna komenda")
+        #ruch[kierunek]()
 
-def plansza():
-    x_1 = random.randint(1, 10)
-    y_1 = random.randint(1, 10)
+    def gra(self):
+        while True:
+            self.ruch()
+            if self.polozenie_gracza == self.polozenie_przedmiotu:
+                self.gracz.wez_przedmiot(self.przedmiot)
+                self.polozenie_przedmiotu = Polozenie (-1, -1)
+                print(f"Postać dostała przedmiot: {self.przedmiot}")
 
-    x_2 = random.randint(1, 10)
-    y_2 = random.randint(1, 10)
+            if self.polozenie_gracza == self.polozenie_bota:
+                print(f"Spotkałeś wroga: {self.bot}\nWalka:\n")
+                while self.gracz.zyje and self.bot.zyje:
+                    obrazenia = self.gracz.atak
+                    print(f"{self.gracz.imie} zadaje obrażenia za {obrazenia}")
+                    self.bot.obrazenia(obrazenia)
+                    if self.bot.zyje:
+                        obrazenia = self.gracz.atak
+                        print(f"{self.bot.imie}  przeżył i oddaje za {obrazenia}")
+                        self.gracz.obrazenia(obrazenia)
+                    print(self.gracz, self.bot)
 
-gra()
+
+
+hero1 = Postac("Superman", 200, 200)
+bot = Postac(fake.name(), fake.random_int(), fake.random_int())
+przedmiot = Przedmiot(fake.word(), fake.random_int(), fake.random_int(), fake.random_int(1, 10))
+
+plansza = Plansza(hero1, bot, przedmiot)
+plansza.gra()

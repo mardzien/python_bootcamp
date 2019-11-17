@@ -1,8 +1,11 @@
 class Product:
-    def __init__(self, id, name, price):
-        self.id = id
+    NEXT_ID = 1
+
+    def __init__(self, name, price):
         self.name = name
         self.price = price
+        self.id = Product.NEXT_ID
+        Product.NEXT_ID += 1
 
 class BasketEntry:
     def __init__(self, product: Product, amount: int):
@@ -63,8 +66,8 @@ class Basket:
         total_price -= value_discount
         return total_price
 
-    def add_discount(self, discount):
-        self.discount = discount.
+    #def add_discount(self, discount):
+        #self.discount = discount.
 
     def generate_report(self):
         report = "Produkty w koszyku\n"
@@ -73,4 +76,19 @@ class Basket:
         report += f"W sumie: {self.count_total_price()}\n"
         return report
 
-# basket.add_product("Woda", "11")
+    @staticmethod
+    def with_products(product_list: list):
+        basket = Basket()
+        for p in product_list:
+            basket.add_product(p, 1)
+        return basket
+
+osoby = [Osoba("Rafał"), Osoba("Ania"), Osoba("Adam")]
+gr = Grupa.utworz_z_osobami(osoby)
+print(gr.osoby)
+
+product = Product('Woda', 10.0)
+product2 = Product('Wóda', 40.0)
+
+print(product.id)
+print(product2.id)
