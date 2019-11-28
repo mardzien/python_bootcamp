@@ -11,6 +11,7 @@ def konwerter(bin_code):
             wynik += 2 ** i
         i -= 1
     return wynik
+
 def main():
     with open('d.txt', 'r') as plik:
         lista_bin = []
