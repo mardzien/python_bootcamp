@@ -14,7 +14,6 @@ def konwerter(bin_code):
 
 def main():
     with open('d.txt', 'r') as plik:
-        lista_bin = []
         lista_dec = []
         szyfr = plik.read()
         lista_bin = szyfr.split(" ")
