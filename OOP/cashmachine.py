@@ -2,7 +2,7 @@
 class CashMachine:
 
     def __init__(self):
-        self.__bills = []
+        self._bills = []
 
     @property
     def is_available(self):
@@ -29,7 +29,11 @@ class CashMachine:
     def print_bills(self):
         print(self.__bills)
 
+
 bankomat = CashMachine()
-bankomat.__bills = [100, 200]
-bankomat.put_money([100, 200])
+
+bankomat.put_money([100, 200, 200])
+print(bankomat.is_available)
+bankomat.__bills = "12312313"
 print(bankomat.__bills)
+bankomat.print_bills()

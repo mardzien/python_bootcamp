@@ -1,5 +1,6 @@
 import math
 
+
 class Osoba:
 
     def __init__(self, name):
@@ -21,13 +22,8 @@ class Grupa:
         return gr
 
 
-#osoby = [Osoba("Rafał"), Osoba("Ania"), Osoba("Adam")]
-#gr = Grupa.utworz_z_osobami(osoby)
-#print(gr.osoby)
-
-
 class Pizza:
-    def __init__(self, skladniki, promien):
+    def __init__(self, skladniki: list, promien: int):
         self.skladniki = skladniki
         self.promien = promien
 
@@ -35,24 +31,21 @@ class Pizza:
         return self.circle_area(self.promien)
 
     @classmethod
-    def prosciutto(cls):
-        return cls(["szynka, mozarella, pomidory"], 30)
+    def margerita(cls):
+        return cls(["mozarella", "pomidory"], 30)
+        # return Pizza(["mozarella", "pomidory"], 30)
 
     @classmethod
-    def margerita(cls):
-        return cls(["mozarella, pomidory"], 30)
-
+    def prosciutto(cls):
+        return cls(["mozarella", "pomidory", "szynka"], 30)
 
     @staticmethod
     def circle_area(r):
         return math.pi * r ** 2
 
     def __str__(self):
-        return f"Pizza {self. promien}, {self.skladniki}"
+        return f"Pizza: {self.promien}, {self.skladniki}"
 
+print(Pizza.margerita())
+print(Pizza.prosciutto())
 
-pizza = Pizza([], 3)
-print(pizza.area())
-
-margerita = Pizza.margerita()
-print(margerita)

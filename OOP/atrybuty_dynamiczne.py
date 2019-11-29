@@ -1,4 +1,5 @@
 
+
 class Osoba:
 
     def __init__(self, imie, rok_ur):
@@ -28,3 +29,4 @@ print(getattr(os1, 'wiek'))
 print(os1.wiek)
 
 if hasattr(os1, 'aaa'):
+    print(getattr(os1, 'aaa'))

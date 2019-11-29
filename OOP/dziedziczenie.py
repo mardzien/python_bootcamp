@@ -1,34 +1,38 @@
-
 class Animal:
-    def __init__(self, name, age, sex):
+    def __init__(self, name, wiek, plec):
         self.name = name
-        self.age = age
-        self.sex = sex
+        self.wiek = wiek
+        self.plec = plec
         self.energia = 100
-        self.sila = 50
 
     def idz(self):
-        print(f"{self.name} idzie.")
+        print(f"{self.name} idzie!")
 
 class Kot(Animal):
-    def __init__(self, name, age, sex):
-        super().__init__(name, age, sex)
+    def __init__(self, *args):
+        super().__init__(*args)
         self.sila = 30
+
     def daj_glos(self):
         print("Miau")
 
 class Pies(Animal):
     def __init__(self, *args):
-        super().__init__(*args)
+        # super().__init__(name, wiek, plec)
+        super(Pies, self).__init__(*args)
         self.sila = 50
+
     def daj_glos(self):
         print("Hau")
 
-mruczek = Kot("Mruczek", 2, "male")
-saba = Pies("Saba", 3, "female")
+
+mruczek = Kot("Mruczek", 2, "samiec")
+saba = Pies("Saba", 3, "samica")
 
 mruczek.daj_glos()
 saba.daj_glos()
 
 mruczek.idz()
 saba.idz()
+
+print(saba.sila > mruczek.sila)

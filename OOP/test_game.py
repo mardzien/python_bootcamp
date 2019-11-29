@@ -39,4 +39,3 @@ class TestPrzedmiot:
         assert siekiera.bonus_do_ataku == 50
         assert siekiera.bonus_do_obrony == 5
         assert siekiera.miejsce == 4
-

@@ -10,9 +10,9 @@
 """
 import random
 from faker import Faker
-fake = Faker("pl_PL")
 
 DEBUG = True
+
 
 class Postac:
     def __init__(self, imie, zycie, sila):
@@ -48,11 +48,11 @@ class Przedmiot:
         self.miejsce = miejsce
 
     def __str__(self):
-        return f"{self.nazwa} (+a: {self.bonus_do_ataku}, +o: {self.bonus_do_obrony}, m: {self.miejsce})"
+        return f"{self.nazwa} (+a:{self.bonus_do_ataku} +o:{self.bonus_do_obrony}) m: {self.miejsce}"
 
 
 class Polozenie:
-    def __init__(self, x, y, zasieg_x = 10, zasieg_y = 10):
+    def __init__(self, x, y, zasieg_x=10, zasieg_y=10):
         self.x = x  # polozenie na osi x
         self.y = y
         self.zasieg_x = zasieg_x
@@ -86,9 +86,11 @@ class Polozenie:
             exit()
 
     def __eq__(self, other):
-        if self.x == other.x and self.y == other.y:
-            return True
-        return False
+        # if self.x == other.x and self.y == other.y:
+        #     return True
+        # return False
+        return self.x == other.x and self.y == other.y
+
 
 class Plansza:
 
@@ -104,9 +106,9 @@ class Plansza:
 
     def ruch(self):
         if DEBUG:
-            print(f"Twoje położenie {self.polozenie_gracza}")
-            print(f"Twoje bota {self.polozenie_bota}")
-            print(f"Twoje przedmiotu {self.polozenie_przedmiotu}")
+            print(f"Twoje położenie: {self.polozenie_gracza}")
+            print(f"Położenie bota: {self.polozenie_bota}")
+            print(f"Położenie przedmiotu: {self.polozenie_przedmiotu}\n")
         kierunek = input("Podaj kierunek g, d, l, p: ")
         # if kierunek == "g":
         #     self.polozenie_gracza.gora()
@@ -117,44 +119,45 @@ class Plansza:
         # elif kierunek == "p":
         #     self.polozenie_gracza.prawo()
 
-        #ruch = {
-        ##    'g':self.polozenie_gracza.gora,
-        #    'd': self.polozenie_gracza.dol,
-        #    'l': self.polozenie_gracza.lewo,
-        #    'p': self.polozenie_gracza.prawo
-        #}
+        # ruch = {
+        #     'g':self.polozenie_gracza.gora,
+        #     'd': self.polozenie_gracza.dol,
+        #     'l': self.polozenie_gracza.lewo,
+        #     'p': self.polozenie_gracza.prawo
+        # }
 
         if hasattr(self.polozenie_gracza, kierunek):
             getattr(self.polozenie_gracza, kierunek)()
         else:
-            print("niepoprawna komenda")
-        #ruch[kierunek]()
+            print("Niepoprawna komenda")
+        # ruch[kierunek]()
 
     def gra(self):
         while True:
             self.ruch()
-            if self.polozenie_gracza == self.polozenie_przedmiotu:
-                self.gracz.wez_przedmiot(self.przedmiot)
-                self.polozenie_przedmiotu = Polozenie (-1, -1)
-                print(f"Postać dostała przedmiot: {self.przedmiot}")
-
             if self.polozenie_gracza == self.polozenie_bota:
-                print(f"Spotkałeś wroga: {self.bot}\nWalka:\n")
+                print(f"Spotkałeś wroga: {self.bot}\n\nwalka:\n")
                 while self.gracz.zyje and self.bot.zyje:
                     obrazenia = self.gracz.atak
-                    print(f"{self.gracz.imie} zadaje obrażenia za {obrazenia}")
+                    print(f"{self.gracz.imie} zadaje obrażenia za {obrazenia}\n")
                     self.bot.obrazenia(obrazenia)
                     if self.bot.zyje:
                         obrazenia = self.gracz.atak
                         print(f"{self.bot.imie}  przeżył i oddaje za {obrazenia}")
                         self.gracz.obrazenia(obrazenia)
-                    print(self.gracz, self.bot)
+                print(self.gracz, self.bot)
+
+            if self.polozenie_gracza == self.polozenie_przedmiotu:
+                self.gracz.wez_przedmiot(self.przedmiot)
+                self.polozenie_przedmiotu = Polozenie(-1, -1)
+                print(f"Postac dostala przedmiot: {self.przedmiot}\n")
 
 
+fake = Faker("pl_PL")
 
 hero1 = Postac("Superman", 200, 200)
 bot = Postac(fake.name(), fake.random_int(), fake.random_int())
-przedmiot = Przedmiot(fake.word(), fake.random_int(), fake.random_int(), fake.random_int(1, 10))
+przedmiot = Przedmiot(fake.text(20), fake.random_int(), fake.random_int(), fake.random_int(1, 10))
 
 plansza = Plansza(hero1, bot, przedmiot)
 plansza.gra()

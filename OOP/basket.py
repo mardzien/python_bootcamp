@@ -2,10 +2,11 @@ class Product:
     NEXT_ID = 1
 
     def __init__(self, name, price):
-        self.name = name
-        self.price = price
         self.id = Product.NEXT_ID
         Product.NEXT_ID += 1
+        self.name = name
+        self.price = price
+
 
 class BasketEntry:
     def __init__(self, product: Product, amount: int):
@@ -18,12 +19,13 @@ class BasketEntry:
     def report(self):
         return f"- {self.product.name} ({self.product.id}), cena: {self.product.price} x {self.amount}\n"
 
+
 class Discount:
     def __init__(self, amount):
         self.amount = amount
 
 class ValueDiscount(Discount):  # dziedziczenie
-    #ValueDiscount dziedziczy po Discount
+    # ValueDiscount dziedziczy po Discount
     pass
 
 class PercentDiscount(Discount):
@@ -62,12 +64,15 @@ class Basket:
         for be in self.basket_entries:
             # total_price += be['product'].price * be['amount']
             total_price += be.count_price()
-        value_discount = sum(self.discounts)
-        total_price -= value_discount
-        return total_price
 
-    #def add_discount(self, discount):
-        #self.discount = discount.
+        # trzeba od tego odjąć upusty
+        value_discount = sum([x.amount for x in self.discounts if isinstance(x, ValueDiscount)])
+        percent_discount = sum([x.amount for x in self.discounts if isinstance(x, PercentDiscount)])
+        total_price -= value_discount
+        if percent_discount:
+            total_price = total_price - total_price/percent_discount
+
+        return total_price
 
     def generate_report(self):
         report = "Produkty w koszyku\n"
@@ -76,19 +81,12 @@ class Basket:
         report += f"W sumie: {self.count_total_price()}\n"
         return report
 
+    def add_discount(self, discount):
+        self.discounts.append(discount)
+
     @staticmethod
     def with_products(product_list: list):
         basket = Basket()
         for p in product_list:
             basket.add_product(p, 1)
         return basket
-
-osoby = [Osoba("Rafał"), Osoba("Ania"), Osoba("Adam")]
-gr = Grupa.utworz_z_osobami(osoby)
-print(gr.osoby)
-
-product = Product('Woda', 10.0)
-product2 = Product('Wóda', 40.0)
-
-print(product.id)
-print(product2.id)
