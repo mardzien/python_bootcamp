@@ -1,0 +1,32 @@
+[
+    {
+        "imie": "Rafa\u0142",
+        "nazwisko": "Korzeniewski",
+        "rok": "1980",
+        "pensja": "2500"
+    },
+    {
+        "imie": "Anna",
+        "nazwisko": "Jankowska",
+        "rok": "1982",
+        "pensja": "10000"
+    },
+    {
+        "imie": "xxx",
+        "nazwisko": "yyy",
+        "rok": "1234",
+        "pensja": "1233"
+    },
+    {
+        "imie": "sss",
+        "nazwisko": "ddd",
+        "rok": "1234",
+        "pensja": "12343"
+    },
+    {
+        "imie": "aaa",
+        "nazwisko": "bbb",
+        "rok": "1999",
+        "pensja": "25000"
+    }
+]
