@@ -1,33 +1,39 @@
-from faker import Faker
-fake = Faker("pl_PL")
 from collections import defaultdict
 
-#1. ponumeruj i wypisz linie
-def numerator(nazwa_pliku):
+from faker import Faker
+# 1. Napisz funkcję, która ponumeruje linie w pliku:
 
-    with open(nazwa_pliku, 'r') as fh:
-        licznik = 1
-        for line in fh.read().splitlines():
-            print(f"({licznik}) {line}")
-            licznik += 1
+def ponumeruj(nazwa_pliku):
+    with open(nazwa_pliku) as f:
+        for count, line in enumerate(f, start=1):
+            print(count, line.rstrip())
 
-numerator("text.txt")
-#2. zwróć liczbę linii w pliku
-def zwroc_liczbe_linii(nazwa_pliku):
-    with open(nazwa_pliku, 'r') as fh:
-        licznik = 0
-        for line in fh.read().splitlines():
-            licznik += 1
-    return licznik
+# 2. Napisz funkcję, która zwróci liczbę linii w pliku
+def liczba_linii_1(plik):
+    with open(plik) as f:
+        # for c, line in enumerate(f, start=1):
+        #     pass
+        c = sum(1 for line in f)
+    return c
 
-print(zwroc_liczbe_linii("text.txt"))
 
-#3. Korzystając z faker utwórz plik z losową treścią
+def liczba_linii_2(plik):
+    with open(plik) as f:
+        # for c, line in enumerate(f, start=1):
+        #     pass
+        c = sum(1 for line in f)
+    return c
 
-def utworz_losowa_tresc(nazwa_pliku = "losowa.txt", n = 100000):
-    text = fake.text(n)
-    with open(nazwa_pliku, 'w') as fh:
-        fh.write(text)
+# print(liczba_linii("numerator.py"))
+# 3. Korzystając z faker utwórz plik z losowa treścią
+def losowa_tresc(nazwa="losowa.txt", n=1000):
+    faker = Faker("pl_PL")
+    text = faker.text(n)
+    with open(nazwa, 'w') as f:
+        f.write(text)
+
+losowa_tresc(n=100000)
+# 4. Napisz funkcję, która zliczy częstotliwość występowania liter w pliku
 
 def zlicz_znaki(text):
     zliczenia = defaultdict(int)
@@ -37,24 +43,33 @@ def zlicz_znaki(text):
         zliczenia[znak] = text.count(znak)
     return zliczenia
 
-def czestotliwosc_liter(nazwa_pliku):
-    with open(nazwa_pliku) as fh:
-        text = fh.read().lower()
+def czestotliwosc_liter(plik):
+    with open(plik) as f:
+        text = f.read().lower()
         zliczenia = zlicz_znaki(text)
     return zliczenia
 
-#for litera, licznik in sorted(czestotliwosc_liter("fake.txt").items(), key=lambda x:x[1], reverse = True):
-#    print(f"{litera}: {licznik}")
+# for litera, licznik in sorted(czestotliwosc_liter("losowa.txt").items(), key=lambda x: x[1], reverse=True):
+#     print(f"{litera}: {licznik}")
 
-def czestotliwosc_slow(nazwa_pliku):
-    slowa = defaultdict()
-    with open(nazwa_pliku) as fh:
-        text = fh.read().lower().split()
+# 5. Napisz funkcję, która zliczy częstotliwość występowania słów w pliku
+#    Wypisz w formacie słowo: ilosc  - posortuj od najczęsciej używanych do tych najrzadszych
+
+
+def czestotliwosc_slow(plik):
+    slowa = defaultdict(int)
+    with open(plik) as f:
+        text = f.read().lower()
+        text = text.replace(".", "")
+        text = text.split()
         for slowo in text:
             slowa[slowo] += 1
+
     return slowa
 
-for slowo, licznik in sorted(czestotliwosc_slow("fake.txt").items(), key=lambda x: x[1], reverse = True):
+for slowo, licznik in sorted(czestotliwosc_slow("bible.txt").items(), key=lambda x: x[1], reverse=True)[:30]:
     print(f"{slowo}: {licznik}")
 
-utworz_losowa_tresc("fake.txt")
+# with open("1000000_linii.txt", 'w') as f:
+#     for i in range(1000000):
+#         f.write(str(i))

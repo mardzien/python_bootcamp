@@ -4,6 +4,11 @@ class Osoba:
     def __init__(self, imie, email):
         self.imie = imie
         self.email = email
+        self.validate()
+
+    def validate(self):
+        if not "@" in self.email:
+            raise ValueError("invalid email")
 
 
     def show(self):
